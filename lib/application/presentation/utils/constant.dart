@@ -1,5 +1,7 @@
-// Assets
 import 'package:flutter/material.dart';
+
+const String testPhoneNumber = '+918087808780';
+const int testOTP = 111111;
 
 const String appLogo = 'assets/images/app_logo.png';
 const String bgImage = 'assets/images/bg_image.png';

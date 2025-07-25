@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lilac_chat/application/controllers/auth/auth_controller.dart';
 
 import 'package:lilac_chat/application/presentation/routes/routes.dart';
 import 'package:lilac_chat/application/presentation/utils/colors.dart';
@@ -13,6 +14,7 @@ class ScreenOtpVerification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authController = Get.find<AuthController>();
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
@@ -57,14 +59,15 @@ class ScreenOtpVerification extends StatelessWidget {
               adjustHieght(10.h),
               Pinput(
                 mainAxisAlignment: MainAxisAlignment.start,
-                onCompleted: (value) {},
+
                 length: 6,
+                controller: authController.otpController,
                 defaultPinTheme: PinTheme(
                   width: 50,
                   height: 50,
                   textStyle: Theme.of(
                     context,
-                  ).textTheme.displayMedium?.copyWith(),
+                  ).textTheme.displayMedium?.copyWith(fontSize: 22),
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -101,7 +104,7 @@ class ScreenOtpVerification extends StatelessWidget {
               CustomEventButton(
                 text: 'Verify',
                 onTap: () {
-                  Get.toNamed(Routes.home);
+                  authController.otpVerification();
                 },
                 showGradiant: true,
                 color: LinearGradient(colors: [klightpink, kprimary]),

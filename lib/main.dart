@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lilac_chat/application/presentation/routes/routes_generators.dart';
 import 'package:lilac_chat/application/presentation/theme/app_theme.dart';
-import 'package:lilac_chat/application/presentation/utils/colors.dart';
+import 'package:lilac_chat/domain/core/bindings/all_bindings.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +32,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppThemes.lightTheme(),
         darkTheme: AppThemes.lightTheme(),
+        initialBinding: AllControllerBindings(),
         getPages: RoutesGenerator.routes,
       ),
     );
