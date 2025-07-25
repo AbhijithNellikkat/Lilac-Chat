@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:lilac_chat/application/presentation/routes/routes.dart';
 import 'package:lilac_chat/application/presentation/screens/auth/login_screen.dart';
 import 'package:lilac_chat/application/presentation/screens/auth/otp_verificaton_screen.dart';
+import 'package:lilac_chat/application/presentation/screens/auth/phone_number_screen.dart';
 import 'package:lilac_chat/application/presentation/screens/home/home_screen.dart';
 import 'package:lilac_chat/application/presentation/screens/splash/splash_screen.dart';
 
@@ -18,8 +19,14 @@ class RoutesGenerator {
     ),
 
     GetPage(
-      name: Routes.otpverification,
+      name: Routes.otpVerification,
       page: () => const ScreenOtpVerification(),
+      transition: Transition.fadeIn,
+      transitionDuration: animationDuration,
+    ),
+    GetPage(
+      name: Routes.phoneNumber,
+      page: () => const ScreenPhoneNumber(),
       transition: Transition.fadeIn,
       transitionDuration: animationDuration,
     ),
