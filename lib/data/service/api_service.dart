@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:lilac_chat/data/shared_pref/shared_pref.dart';
 import 'package:lilac_chat/domain/core/api_endpoints/api_endpoints.dart';
 // ignore: depend_on_referenced_packages
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -34,20 +35,27 @@ class ApiService {
     Map<String, dynamic>? headers,
     Map<String, dynamic>? data,
     bool isJapx = false,
+    bool addHeader = true,
   }) async {
     try {
-      final response = await _dio.get(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        options: Options(
-          headers:
-              headers ??
+      if (addHeader) {
+        final accessToken = await SharedPref.getToken().then((token) => token);
+
+        _dio.options.headers.addAll({
+          'authorization': "Bearer $accessToken",
+          ...headers ??
               {
                 'content-Type': 'application/json',
                 'accept': 'application/json',
               },
-        ),
+        });
+      } else {
+        _dio.options.headers['content-Type'] = 'application/json';
+      }
+      final response = await _dio.get(
+        url,
+        data: data,
+        queryParameters: queryParameters,
       );
       return isJapx ? Japx.decode(response.data) : response.data;
     } catch (e) {
@@ -61,20 +69,27 @@ class ApiService {
     Map<String, dynamic>? headers,
     dynamic data,
     bool isJapx = false,
+    bool addHeader = true,
   }) async {
     try {
-      final response = await _dio.post(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        options: Options(
-          headers:
-              headers ??
+      if (addHeader) {
+        final accessToken = await SharedPref.getToken().then((token) => token);
+
+        _dio.options.headers.addAll({
+          'authorization': "Bearer $accessToken",
+          ...headers ??
               {
                 'content-Type': 'application/json',
                 'accept': 'application/json',
               },
-        ),
+        });
+      } else {
+        _dio.options.headers['content-Type'] = 'application/json';
+      }
+      final response = await _dio.post(
+        url,
+        data: data,
+        queryParameters: queryParameters,
       );
 
       return isJapx ? Japx.decode(response.data) : response.data;
@@ -89,20 +104,27 @@ class ApiService {
     Map<String, dynamic>? headers,
     dynamic data,
     bool isJapx = false,
+    bool addHeader = true,
   }) async {
     try {
-      final response = await _dio.put(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        options: Options(
-          headers:
-              headers ??
+      if (addHeader) {
+        final accessToken = await SharedPref.getToken().then((token) => token);
+
+        _dio.options.headers.addAll({
+          'authorization': "Bearer $accessToken",
+          ...headers ??
               {
                 'content-Type': 'application/json',
                 'accept': 'application/json',
               },
-        ),
+        });
+      } else {
+        _dio.options.headers['content-Type'] = 'application/json';
+      }
+      final response = await _dio.put(
+        url,
+        data: data,
+        queryParameters: queryParameters,
       );
       return isJapx ? Japx.decode(response.data) : response.data;
     } catch (e) {
@@ -116,20 +138,27 @@ class ApiService {
     Map<String, dynamic>? headers,
     dynamic data,
     bool isJapx = false,
+    bool addHeader = true,
   }) async {
     try {
-      final response = await _dio.delete(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        options: Options(
-          headers:
-              headers ??
+      if (addHeader) {
+        final accessToken = await SharedPref.getToken().then((token) => token);
+
+        _dio.options.headers.addAll({
+          'authorization': "Bearer $accessToken",
+          ...headers ??
               {
                 'content-Type': 'application/json',
                 'accept': 'application/json',
               },
-        ),
+        });
+      } else {
+        _dio.options.headers['content-Type'] = 'application/json';
+      }
+      final response = await _dio.delete(
+        url,
+        data: data,
+        queryParameters: queryParameters,
       );
       return isJapx ? Japx.decode(response.data) : response.data;
     } catch (e) {

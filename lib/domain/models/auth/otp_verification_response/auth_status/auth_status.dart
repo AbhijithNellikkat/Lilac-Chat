@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'device_meta.dart';
+
 part 'auth_status.g.dart';
 
 @JsonSerializable()
@@ -14,6 +16,8 @@ class AuthStatus {
   bool? is2faVerifiedByUser;
   @JsonKey(name: 'is_email_verification_required')
   bool? isEmailVerificationRequired;
+  @JsonKey(name: 'device_meta')
+  DeviceMeta? deviceMeta;
 
   AuthStatus({
     this.accessToken,
@@ -21,6 +25,7 @@ class AuthStatus {
     this.is2faConfiguredByUser,
     this.is2faVerifiedByUser,
     this.isEmailVerificationRequired,
+    this.deviceMeta,
   });
 
   factory AuthStatus.fromJson(Map<String, dynamic> json) {
