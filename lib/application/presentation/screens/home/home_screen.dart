@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:lilac_chat/application/controllers/chat/chat_controller.dart';
 import 'package:lilac_chat/application/controllers/internet/internet_connection.dart';
+import 'package:lilac_chat/application/presentation/routes/routes.dart';
 import 'package:lilac_chat/application/presentation/utils/colors.dart';
 import 'package:lilac_chat/application/presentation/utils/constant.dart';
 import 'package:lilac_chat/application/presentation/utils/images/network_image_with_loader.dart';
 import 'package:lilac_chat/application/presentation/utils/refresh_indicator/empty_refresh_indicator.dart';
-import 'package:lilac_chat/application/presentation/utils/shimmer/shimmer.dart';
+import 'package:lilac_chat/application/presentation/widgets/loading_indicator.dart';
+import 'package:lilac_chat/data/shared_pref/shared_pref.dart';
 
 class ScreenHome extends StatelessWidget {
   const ScreenHome({super.key});
@@ -36,44 +39,52 @@ class ScreenHome extends StatelessWidget {
               adjustHieght(10.h),
 
               // Horizontal users list
-              SizedBox(
-                height: 120.h,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12.0),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: chatController.allChats.length,
-                    separatorBuilder: (context, index) => adjustWidth(14),
-                    itemBuilder: (context, index) {
-                      final user = chatController.allChats[index];
-                      return Column(
-                        children: [
-                          CircleAvatar(
-                            radius: 35,
-                            child: NetworkImageWithLoader(
-                              user.profilePhotoUrl ?? '',
-                              radius: 50,
-                            ),
-                          ),
-                          adjustHieght(5.h),
-                          Text(
-                            user.name ?? '',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.displaySmall?.copyWith(fontSize: 13.sp),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
+              chatController.chatsLoading.value
+                  ? Center(child: CustomLoadingIndicator())
+                  : SizedBox(
+                      height: 120.h,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12.0),
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: chatController.allChats.length,
+                          separatorBuilder: (context, index) => adjustWidth(14),
+                          itemBuilder: (context, index) {
+                            final user = chatController.allChats[index];
+                            return Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: 35,
+                                  child: NetworkImageWithLoader(
+                                    user.profilePhotoUrl ?? '',
+                                    radius: 50,
+                                  ),
+                                ),
+                                adjustHieght(5.h),
+                                Text(
+                                  user.name ?? '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall
+                                      ?.copyWith(fontSize: 13.sp),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
 
               // Search bar
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextFormField(
+                  controller: chatController.searchController,
+                  onChanged: (value) {
+                    chatController.searchQuery.value = value;
+                    chatController.filterChats();
+                  },
                   onTapUpOutside: (_) {
                     FocusScope.of(context).unfocus();
                   },
@@ -81,6 +92,22 @@ class ScreenHome extends StatelessWidget {
                     context,
                   ).textTheme.displaySmall?.copyWith(fontSize: 16.sp),
                   decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        chatController.searchQuery.value.isNotEmpty
+                            ? Icons.close_sharp
+                            : Iconsax.search_favorite,
+                        color: kblack.withOpacity(0.7),
+                      ),
+                      onPressed: () {
+                        if (chatController.searchQuery.value.isNotEmpty) {
+                          chatController.searchController.clear();
+                          chatController.searchQuery.value = '';
+                          chatController.filterChats();
+                          FocusScope.of(context).unfocus();
+                        }
+                      },
+                    ),
                     hintText: 'Search',
                     hintStyle: Theme.of(
                       context,
@@ -115,15 +142,7 @@ class ScreenHome extends StatelessWidget {
 
               // Loading shimmer
               if (chatController.chatsLoading.value)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: ShimmerLoader(
-                    itemCount: 7,
-                    height: 60,
-                    width: double.infinity,
-                    seprator: adjustHieght(10),
-                  ),
-                )
+                Center(child: CustomLoadingIndicator())
               else if (!internetConnectionController
                       .isConnectedToInternet
                       .value &&
@@ -154,10 +173,10 @@ class ScreenHome extends StatelessWidget {
                 ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: chatController.allChats.length,
+                  itemCount: chatController.filteredChats.length,
                   separatorBuilder: (context, index) => adjustHieght(10.h),
                   itemBuilder: (context, index) {
-                    final user = chatController.allChats[index];
+                    final user = chatController.filteredChats[index];
 
                     // formatted lastActiveAt
                     String formattedTime = '';
@@ -171,6 +190,21 @@ class ScreenHome extends StatelessWidget {
                     }
 
                     return ListTile(
+                      onTap: () async {
+                        final senderId = await SharedPref.getUserId() ?? '';
+                        Get.toNamed(
+                          Routes.chat,
+                          arguments: {
+                            'index': index,
+                            'currentUserId': senderId,
+                          },
+                        );
+
+                        chatController.fetchMessages(
+                          senderId: senderId,
+                          receiverId: user.id ?? '',
+                        );
+                      },
                       title: Text(
                         user.name ?? '',
                         style: Theme.of(context).textTheme.displaySmall

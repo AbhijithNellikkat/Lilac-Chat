@@ -8,6 +8,7 @@ class SharedPref {
   static const String isLogged = 'is_loggedIn';
   static const String accessKey = 'access_key';
   static const String userNameKey = 'username_Key';
+  static const String userIdKey = 'userid_Key';
 
   static SharedPreferences? _pref;
 
@@ -29,6 +30,7 @@ class SharedPref {
       tokenModel.authStatus?.accessToken ?? '',
     );
     await preferences.setString(userNameKey, tokenModel.name ?? '');
+    await preferences.setString(userIdKey, tokenModel.id ?? '');
   }
 
   static Future<String> getToken() async {
@@ -48,5 +50,10 @@ class SharedPref {
   static Future<String?> getUserName() async {
     final preferences = await _getPrefs();
     return preferences.getString(userNameKey);
+  }
+
+  static Future<String?> getUserId() async {
+    final preferences = await _getPrefs();
+    return preferences.getString(userIdKey);
   }
 }

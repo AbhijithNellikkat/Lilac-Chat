@@ -4,4 +4,5 @@ class Routes {
   static const String otpVerification = '/otp_verification';
   static const String home = '/home';
   static const String phoneNumber = '/phone_number';
+  static const String chat = '/chat';
 }
