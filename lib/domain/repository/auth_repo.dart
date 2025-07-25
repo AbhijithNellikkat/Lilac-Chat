@@ -9,6 +9,7 @@ abstract class AuthRepo {
   Future<Either<Failure, SendOtpResponse>> sendOtp({
     required SendOtpModel sendOtpModel,
   });
+
   Future<Either<Failure, OtpVerificationResponse>> otpVerify({
     required OtpVerifyModel otpVerifyModel,
   });

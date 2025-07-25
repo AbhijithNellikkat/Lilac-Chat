@@ -27,7 +27,7 @@ class AuthService implements AuthRepo {
 
       final result = OtpVerificationResponse.fromJson(response['data']);
 
-      log('OTP VERIFICATION RESULT : $result');
+      // log('OTP VERIFICATION RESULT : $result');
       return Right(result);
     } catch (e) {
       return Left(Failure(message: 'OTP Verification failed', data: e));

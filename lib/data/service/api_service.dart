@@ -49,8 +49,6 @@ class ApiService {
                 'accept': 'application/json',
               },
         });
-      } else {
-        _dio.options.headers['content-Type'] = 'application/json';
       }
       final response = await _dio.get(
         url,
