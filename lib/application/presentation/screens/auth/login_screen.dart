@@ -2,7 +2,9 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lilac_chat/application/presentation/routes/routes.dart';
 import 'package:lilac_chat/application/presentation/screens/auth/widgets/auth_button.dart';
 import 'package:lilac_chat/application/presentation/utils/colors.dart';
 import 'package:lilac_chat/application/presentation/utils/constant.dart';
@@ -79,7 +81,9 @@ class ScreenLogin extends StatelessWidget {
                     label: "Sign in with phone number",
                     backgroundColor: kprimary,
                     textColor: kwhite,
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(Routes.phoneNumber);
+                    },
                   ),
 
                   adjustHieght(30.h),
