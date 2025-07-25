@@ -1,18 +1,16 @@
 import 'dart:developer';
-import 'dart:io';
 
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:lilac_chat/application/presentation/routes/routes.dart';
 import 'package:lilac_chat/application/presentation/utils/constant.dart';
 import 'package:lilac_chat/application/presentation/utils/snackbar/flutter_tost.dart';
 import 'package:lilac_chat/data/service/auth/auth_service.dart';
 import 'package:lilac_chat/data/service/device_meta_service.dart';
+import 'package:lilac_chat/data/shared_pref/shared_pref.dart';
+import 'package:lilac_chat/domain/models/auth/otp_verification_response/otp_verification_response.dart';
 import 'package:lilac_chat/domain/models/auth/otp_verify_model/attributes.dart';
 import 'package:lilac_chat/domain/models/auth/otp_verify_model/data.dart';
-import 'package:lilac_chat/domain/models/auth/otp_verify_model/device_meta.dart';
 import 'package:lilac_chat/domain/models/auth/otp_verify_model/otp_verify_model.dart';
 import 'package:lilac_chat/domain/models/auth/send_otp_model/send_otp_model.dart';
 import 'package:lilac_chat/domain/repository/auth_repo.dart';
@@ -25,6 +23,8 @@ class AuthController extends GetxController {
 
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController otpController = TextEditingController();
+
+  Rx<OtpVerificationResponse> userDetails = OtpVerificationResponse().obs;
 
   // Send otp
   Future<void> sendOtp({required SendOtpModel sendOtp}) async {
@@ -72,8 +72,21 @@ class AuthController extends GetxController {
       (success) async {
         verifyOtpLoading.value = false;
         showCustomToast(message: 'OTP verified successfully!');
-        Get.toNamed(Routes.home);
+
+        await SharedPref.saveUser(tokenModel: success, saveLogin: true);
+
+        Get.offAndToNamed(Routes.home);
       },
     );
+  }
+
+  Future<void> checkLoginStatus(BuildContext context) async {
+    final accessToken = await SharedPref.getToken();
+
+    if (accessToken.isNotEmpty) {
+      Get.offAndToNamed(Routes.home);
+    } else {
+      Get.toNamed(Routes.login);
+    }
   }
 }

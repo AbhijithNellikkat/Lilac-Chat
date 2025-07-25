@@ -23,4 +23,5 @@ BorderRadius kBorderRadius8 = BorderRadius.circular(8);
 BorderRadius kBorderRadius12 = BorderRadius.circular(12);
 BorderRadius kBorderRadius16 = BorderRadius.circular(16);
 BorderRadius kBorderRadius20 = BorderRadius.circular(20);
+BorderRadius kBorderRadius50 = BorderRadius.circular(50);
 BorderRadius kBorderRadius10 = BorderRadius.circular(10);

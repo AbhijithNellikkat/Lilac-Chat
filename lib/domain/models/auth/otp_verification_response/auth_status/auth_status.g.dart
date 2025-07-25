@@ -12,6 +12,9 @@ AuthStatus _$AuthStatusFromJson(Map<String, dynamic> json) => AuthStatus(
   is2faConfiguredByUser: json['is_2fa_configured_by_user'] as bool?,
   is2faVerifiedByUser: json['is_2fa_verified_by_user'] as bool?,
   isEmailVerificationRequired: json['is_email_verification_required'] as bool?,
+  deviceMeta: json['device_meta'] == null
+      ? null
+      : DeviceMeta.fromJson(json['device_meta'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$AuthStatusToJson(AuthStatus instance) =>
@@ -21,4 +24,5 @@ Map<String, dynamic> _$AuthStatusToJson(AuthStatus instance) =>
       'is_2fa_configured_by_user': instance.is2faConfiguredByUser,
       'is_2fa_verified_by_user': instance.is2faVerifiedByUser,
       'is_email_verification_required': instance.isEmailVerificationRequired,
+      'device_meta': instance.deviceMeta,
     };

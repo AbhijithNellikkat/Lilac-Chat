@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lilac_chat/application/controllers/auth/auth_controller.dart';
 import 'package:lilac_chat/application/presentation/routes/routes.dart';
 
 import 'package:lilac_chat/application/presentation/utils/constant.dart';
@@ -34,7 +35,7 @@ class ScreenSplash extends StatelessWidget {
 
   void _navigate(BuildContext context) async {
     await Future.delayed(const Duration(milliseconds: 2000), () {
-      Get.offAndToNamed(Routes.login);
+      Get.find<AuthController>().checkLoginStatus(context);
     });
   }
 }
