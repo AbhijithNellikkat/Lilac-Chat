@@ -41,7 +41,7 @@ class InternetConnectionController extends GetxController {
           isConnectedToInternet.value = false;
           showCustomToast(
             message:
-                'You’re currently offline. Please check your internet connection to continue using Kadhalan.',
+                'You’re currently offline. Please check your internet connection to continue using Lilac Chat.',
             backgroundColor: kred,
           );
           break;

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:lilac_chat/application/controllers/auth/auth_controller.dart';
+import 'package:lilac_chat/application/controllers/chat/chat_controller.dart';
 import 'package:lilac_chat/application/controllers/internet/internet_connection.dart';
 
 class AllControllerBindings implements Bindings {
@@ -7,5 +8,6 @@ class AllControllerBindings implements Bindings {
   void dependencies() {
     Get.put(InternetConnectionController(), permanent: true);
     Get.put(AuthController(), permanent: true);
+    Get.lazyPut(() => ChatController(), fenix: true);
   }
 }

@@ -1,12 +1,13 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:lilac_chat/domain/models/auth/otp_verification_response/otp_verification_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {
   static const String isLogged = 'is_loggedIn';
   static const String accessKey = 'access_key';
-  static const String userNameKey = 'access_key';
+  static const String userNameKey = 'username_Key';
 
   static SharedPreferences? _pref;
 
@@ -20,7 +21,7 @@ class SharedPref {
     required OtpVerificationResponse tokenModel,
     bool? saveLogin,
   }) async {
-    log('Save token =>() ${tokenModel.authStatus?.accessToken ?? ''}');
+    log('✅ Save token =>() ${tokenModel.authStatus?.accessToken ?? ''}');
     final preferences = await _getPrefs();
     await setLogin();
     await preferences.setString(
@@ -34,6 +35,7 @@ class SharedPref {
     log('get token =>()');
     final preferences = await _getPrefs();
     final accessToken = preferences.getString(accessKey);
+    debugPrint('✅ accessToken => $accessToken');
     return accessToken ?? '';
   }
 
