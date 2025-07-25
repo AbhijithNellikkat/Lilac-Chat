@@ -34,7 +34,7 @@ class ScreenSplash extends StatelessWidget {
 
   void _navigate(BuildContext context) async {
     await Future.delayed(const Duration(milliseconds: 2000), () {
-      Get.toNamed(Routes.login);
+      Get.offAndToNamed(Routes.login);
     });
   }
 }

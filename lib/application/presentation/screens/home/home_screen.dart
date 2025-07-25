@@ -5,6 +5,12 @@ class ScreenHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar());
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Messages'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
+    );
   }
 }
