@@ -34,6 +34,7 @@ class ScreenPhoneNumber extends StatelessWidget {
                   ),
                 ),
               ),
+              adjustHieght(25.h),
 
               // Phone Input Field
               IntlPhoneField(
