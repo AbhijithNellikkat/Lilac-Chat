@@ -5,12 +5,13 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:lilac_chat/application/controllers/chat/chat_controller.dart';
 import 'package:lilac_chat/application/controllers/internet/internet_connection.dart';
+import 'package:lilac_chat/application/presentation/routes/routes.dart';
 import 'package:lilac_chat/application/presentation/utils/colors.dart';
 import 'package:lilac_chat/application/presentation/utils/constant.dart';
 import 'package:lilac_chat/application/presentation/utils/images/network_image_with_loader.dart';
 import 'package:lilac_chat/application/presentation/utils/refresh_indicator/empty_refresh_indicator.dart';
-import 'package:lilac_chat/application/presentation/utils/shimmer/shimmer.dart';
 import 'package:lilac_chat/application/presentation/widgets/loading_indicator.dart';
+import 'package:lilac_chat/data/shared_pref/shared_pref.dart';
 
 class ScreenHome extends StatelessWidget {
   const ScreenHome({super.key});
@@ -189,6 +190,21 @@ class ScreenHome extends StatelessWidget {
                     }
 
                     return ListTile(
+                      onTap: () async {
+                        final senderId = await SharedPref.getUserId() ?? '';
+                        Get.toNamed(
+                          Routes.chat,
+                          arguments: {
+                            'index': index,
+                            'currentUserId': senderId,
+                          },
+                        );
+
+                        chatController.fetchMessages(
+                          senderId: senderId,
+                          receiverId: user.id ?? '',
+                        );
+                      },
                       title: Text(
                         user.name ?? '',
                         style: Theme.of(context).textTheme.displaySmall

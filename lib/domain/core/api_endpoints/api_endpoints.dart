@@ -10,5 +10,5 @@ class ApiEndpoints {
   // Messages & Chat
   static String allMessges = '/chat/chat-messages/queries/contact-users';
   static String userChat =
-      '/chat/chat-messages/queries/chat-between-users/55/81';
+      '/chat/chat-messages/queries/chat-between-users/{receiverId}/{senderId}';
 }

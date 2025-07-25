@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lilac_chat/data/service/chat/chat_service.dart';
+import 'package:lilac_chat/domain/models/chat/message/message.dart';
 import 'package:lilac_chat/domain/models/chat/user_details/user_details.dart';
 import 'package:lilac_chat/domain/repository/chat_repo.dart';
 
@@ -8,7 +9,11 @@ class ChatController extends GetxController {
   final ChatRepo chatService = ChatService();
   RxBool chatsLoading = false.obs;
 
+  RxBool messagesLoading = false.obs;
+
   RxList<UserDetails> allChats = <UserDetails>[].obs;
+
+  RxList<Message> messages = <Message>[].obs;
 
   RxList<UserDetails> filteredChats = <UserDetails>[].obs;
 
@@ -34,6 +39,26 @@ class ChatController extends GetxController {
         chatsLoading.value = false;
         allChats.assignAll(success);
         filteredChats.assignAll(success);
+      },
+    );
+  }
+
+  Future<void> fetchMessages({
+    required String senderId,
+    required String receiverId,
+  }) async {
+    messagesLoading.value = true;
+    final result = await chatService.getMessages(
+      receiverId: receiverId,
+      senderId: senderId,
+    );
+    result.fold(
+      (failure) {
+        messagesLoading.value = false;
+      },
+      (success) async {
+        messagesLoading.value = false;
+        messages.assignAll(success);
       },
     );
   }
