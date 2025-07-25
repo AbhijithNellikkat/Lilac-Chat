@@ -3,16 +3,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:lilac_chat/application/presentation/routes/routes.dart';
+import 'package:lilac_chat/application/controllers/auth/auth_controller.dart';
 import 'package:lilac_chat/application/presentation/utils/colors.dart';
 import 'package:lilac_chat/application/presentation/utils/constant.dart';
+import 'package:lilac_chat/application/presentation/utils/snackbar/flutter_tost.dart';
 import 'package:lilac_chat/application/presentation/widgets/custom_event_button.dart';
+import 'package:lilac_chat/application/presentation/widgets/loading_indicator.dart';
+import 'package:lilac_chat/domain/models/auth/send_otp_model/attributes.dart';
+import 'package:lilac_chat/domain/models/auth/send_otp_model/data.dart';
+import 'package:lilac_chat/domain/models/auth/send_otp_model/send_otp_model.dart';
 
 class ScreenPhoneNumber extends StatelessWidget {
   const ScreenPhoneNumber({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authController = Get.find<AuthController>();
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
@@ -40,7 +46,7 @@ class ScreenPhoneNumber extends StatelessWidget {
               IntlPhoneField(
                 disableLengthCheck: false,
                 decoration: InputDecoration(
-                  hintText: '974568 1203',
+                  hintText: '8087808780',
 
                   prefixIcon: const Icon(
                     Icons.phone_iphone_rounded,
@@ -72,8 +78,7 @@ class ScreenPhoneNumber extends StatelessWidget {
                 initialCountryCode: 'IN',
 
                 onChanged: (phone) {
-                  // You can handle the full number here
-                  print(phone.completeNumber);
+                  authController.phoneNumber.text = phone.number;
                 },
               ),
 
@@ -89,16 +94,34 @@ class ScreenPhoneNumber extends StatelessWidget {
               ),
 
               const Spacer(),
-              CustomEventButton(
-                text: 'Next',
-                onTap: () {
-                  Get.toNamed(Routes.otpVerification);
-                },
-                showGradiant: true,
-                color: LinearGradient(colors: [klightpink, kprimary]),
-                width: double.infinity,
-                hieght: 45.h,
-                textColr: kwhite,
+              Obx(
+                () => authController.sendOtpLoading.value
+                    ? CustomLoadingIndicator()
+                    : CustomEventButton(
+                        text: 'Next',
+                        onTap: () {
+                          if (authController.phoneNumber.text.isNotEmpty) {
+                            authController.sendOtp(
+                              sendOtp: SendOtpModel(
+                                data: Data(
+                                  attributes: Attributes(
+                                    phone: testPhoneNumber,
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            showCustomToast(
+                              message: 'Please enter your phone number',
+                            );
+                          }
+                        },
+                        showGradiant: true,
+                        color: LinearGradient(colors: [klightpink, kprimary]),
+                        width: double.infinity,
+                        hieght: 45.h,
+                        textColr: kwhite,
+                      ),
               ),
               adjustHieght(15.h),
             ],
