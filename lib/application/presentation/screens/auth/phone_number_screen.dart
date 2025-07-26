@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:lilac_chat/application/controllers/auth/auth_controller.dart';
+import 'package:lilac_chat/application/controllers/internet/internet_connection.dart';
+import 'package:lilac_chat/application/presentation/screens/auth/widgets/phone_text_field.dart';
 import 'package:lilac_chat/application/presentation/utils/colors.dart';
 import 'package:lilac_chat/application/presentation/utils/constant.dart';
 import 'package:lilac_chat/application/presentation/utils/snackbar/flutter_tost.dart';
@@ -19,6 +19,8 @@ class ScreenPhoneNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authController = Get.find<AuthController>();
+    final InternetConnectionController internetConnectionController =
+        Get.find<InternetConnectionController>();
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
@@ -29,7 +31,6 @@ class ScreenPhoneNumber extends StatelessWidget {
             children: [
               adjustHieght(40.h),
 
-              // Title
               Center(
                 child: Text(
                   "Enter your phone\nnumber",
@@ -37,54 +38,16 @@ class ScreenPhoneNumber extends StatelessWidget {
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     fontSize: 25.sp,
                     fontWeight: FontWeight.w600,
+                    letterSpacing: 0.2,
                   ),
                 ),
               ),
               adjustHieght(25.h),
 
-              // Phone Input Field
-              IntlPhoneField(
-                disableLengthCheck: false,
-                decoration: InputDecoration(
-                  hintText: '8087808780',
-
-                  prefixIcon: const Icon(
-                    Icons.phone_iphone_rounded,
-                    color: Colors.black,
-                  ),
-                  hintStyle: GoogleFonts.poppins(
-                    color: Colors.black54,
-                    fontSize: 16,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Colors.black12,
-                      width: 1,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: kprimary, width: 1),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Colors.black12,
-                      width: 1,
-                    ),
-                  ),
-                ),
-                initialCountryCode: 'IN',
-
-                onChanged: (phone) {
-                  authController.phoneNumber.text = phone.number;
-                },
-              ),
+              PhoneTextField(),
 
               adjustHieght(5.h),
 
-              // Info Text
               Text(
                 'Fliq will send you a text with a verification code.',
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
@@ -100,6 +63,17 @@ class ScreenPhoneNumber extends StatelessWidget {
                     : CustomEventButton(
                         text: 'Next',
                         onTap: () {
+                          if (!internetConnectionController
+                              .isConnectedToInternet
+                              .value) {
+                            showCustomToast(
+                              backgroundColor: kred,
+                              message:
+                                  "Internet connection is required to continue. Please connect to the internet and try again.",
+                            );
+
+                            return;
+                          }
                           if (authController.phoneNumber.text.isNotEmpty) {
                             authController.sendOtp(
                               sendOtp: SendOtpModel(

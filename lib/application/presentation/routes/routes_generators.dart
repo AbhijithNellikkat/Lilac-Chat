@@ -43,7 +43,10 @@ class RoutesGenerator {
         final args = Get.arguments as Map<String, dynamic>;
         return ScreenChat(
           currentUserId: args['currentUserId'],
+          name: args['name'],
+          isOnline: args['isOnline'],
           index: args['index'],
+          profileImage: args['profileImage'],
         );
       },
       transition: Transition.cupertino,

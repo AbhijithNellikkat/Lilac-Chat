@@ -8,6 +8,7 @@ import 'package:lilac_chat/application/presentation/routes/routes.dart';
 import 'package:lilac_chat/application/presentation/screens/auth/widgets/auth_button.dart';
 import 'package:lilac_chat/application/presentation/utils/colors.dart';
 import 'package:lilac_chat/application/presentation/utils/constant.dart';
+import 'package:lilac_chat/application/presentation/utils/snackbar/flutter_tost.dart';
 
 class ScreenLogin extends StatelessWidget {
   const ScreenLogin({super.key});
@@ -59,7 +60,12 @@ class ScreenLogin extends StatelessWidget {
                     label: "Sign in with Google",
                     backgroundColor: Colors.white,
                     textColor: kblack,
-                    onTap: () {},
+                    onTap: () {
+                      showCustomToast(
+                        message:
+                            "This feature is not available yet. See you soon 😉",
+                      );
+                    },
                   ),
 
                   adjustHieght(10.h),
@@ -70,7 +76,12 @@ class ScreenLogin extends StatelessWidget {
                     label: "Sign in with Facebook",
                     backgroundColor: kfbclr,
                     textColor: kwhite,
-                    onTap: () {},
+                    onTap: () {
+                      showCustomToast(
+                        message:
+                            "This feature is not available yet. See you soon 😉",
+                      );
+                    },
                   ),
 
                   adjustHieght(10.h),

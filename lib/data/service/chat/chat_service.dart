@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:lilac_chat/data/service/api_service.dart';
 import 'package:lilac_chat/domain/core/api_endpoints/api_endpoints.dart';
