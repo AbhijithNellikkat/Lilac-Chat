@@ -6,7 +6,6 @@ class AppThemes {
   // Light Theme Configuration
   static ThemeData lightTheme() {
     return ThemeData(
-      // fontFamily: fontPoppins,
       brightness: Brightness.light,
       colorScheme: const ColorScheme.light(
         primary: kprimary,
@@ -49,10 +48,7 @@ class AppThemes {
         titleSmall: const TextStyle(fontSize: 13, color: kblack),
       ),
 
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: kblack,
-        refreshBackgroundColor: kblack,
-      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(color: kblack),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
 
@@ -78,6 +74,7 @@ class AppThemes {
           fontWeight: FontWeight.w500,
         ),
       ),
+
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: kprimary,

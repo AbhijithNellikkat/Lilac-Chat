@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:lilac_chat/application/presentation/routes/routes.dart';
@@ -60,8 +58,6 @@ class AuthController extends GetxController {
         ),
       ),
     );
-
-    log('${model.data?.type}');
 
     final result = await authService.otpVerify(otpVerifyModel: model);
     result.fold(
